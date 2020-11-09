@@ -147,7 +147,7 @@ def populateTables(_conn):
             test = []
             if len(availcity) == 0:
                 break
-            num = r.randint(0, len(availcity))
+            num = r.randint(0, len(availcity)-1)
             j = 0
             while j < num:
                 randcity = r.choice(availcity)

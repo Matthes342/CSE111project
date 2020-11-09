@@ -68,7 +68,7 @@ def insertisp(_conn, name):
             availcity.append(city[0])
         if len(availcity) == 0:
             break
-        num = r.randint(0, len(availcity))
+        num = r.randint(0, len(availcity)-1)
         j = 0
         while j < num:
             randcity = r.choice(availcity)
@@ -113,17 +113,38 @@ def deleteisp(_conn ,ispname):
         c.execute('''delete from network where n_conname = ?''', (cons[0],))
         c.execute('''delete from contractsperloc where cpl_conname = ?''', (cons[0],))
 
+def inserthouse(_conn, address, devicecount, location): #picks random contract
+    c = _conn.cursor()
+    c.execute("""insert into house values (?,?,?)""",(address, devicecount, location))
+    c.execute("""select distinct d_devtype from devices""")
+    devs = c.fetchall()
+    for i in range(devicecount):
+        num = r.randint(0,len(devs)-1)
+        devname = names.get_first_name() + "'s " + devs[num][0]
+        c.execute("""insert into devices values (?,?,?)""", (devname, devs[num][0], address))
+    c.execute('''select s_speed from speed where s_locname =?''', (location,))
+    speeds = c.fetchall()
+    c.execute('''select co_ispname, co_conname from contractsperloc, contractsoff where cpl_conname = co_conname and cpl_locname = ?''', (location,))
+    isps = c.fetchall()
+    if len(isps) == 0 or len(speeds) == 0:
+        print('no contract possible')
+        return
+    num2 = r.randint(0,len(isps)-1)
+    num = r.randint(0,len(speeds)-1)
+    c.execute('''insert into network values (?,?,?,?)''', (isps[num2][1], builddb.priceOfSpeed(speeds[num][0], isps[num2][0]), speeds[num][0], address))
+
 def main():
     database = r"proj.sqlite"
 
     # create a database connection
     conn = openConnection(database)
     with conn:
-        #insertisp(conn, 'randomname')
-        #updatespeed(conn, 50, 60)
-        #deletedev(conn, "Judith's console")
-        #endcontract(conn, 'Address___#70707')
+        insertisp(conn, 'randomname')
+        updatespeed(conn, 50, 60)
+        #deletedev(conn, "Judith's console") #<- needs current db
+        #endcontract(conn, 'Address___#70707')#<- needs current db
         deleteisp(conn, 'Pineapple Inc')
+        inserthouse(conn, 'Address___#1111', 12, 'Merced')
 
     closeConnection(conn, database)
 
