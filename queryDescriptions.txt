@@ -7,3 +7,8 @@
 7. Find the average price and speed of each ISP.
 8. Select the max speed of each location.
 9. List the available contracts per address. 
+10. What is the most expensive contract?
+11. What is the least expensive contract?
+12. Which contract is owned by the most houses?
+13. What is the average speed offered in each city?
+14. Which city contains the most phones?
