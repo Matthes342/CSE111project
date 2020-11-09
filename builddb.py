@@ -130,7 +130,23 @@ def populateTables(_conn):
             for city in test:
                 c.execute(sql, (i, city))
                 print("Inserting: (" + str(i) + ' ' + city +') into: speed')
-        
+
+        sql = 'insert into contractsperloc values (?,?)'
+        c.execute('select co_conname from contractsoff')
+        contracts = c.fetchall()
+        for i in contracts:
+            test = []
+            num = r.randint(0, len(cities)-1)
+            j = 0
+            while j <= num:
+                randcity = r.choice(cities)
+                if randcity not in test:
+                    test.append(randcity)
+                    j += 1
+            for city in test:
+                c.execute(sql, (i[0], city))
+                print("Inserting: (" + str(i[0]) + ' ' + city +') into: contractsperloc')
+
         sql = 'insert into devices values (?,?,?)'
         c.execute('select h_address, devicecount from house')
         houses = c.fetchall()
