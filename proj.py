@@ -1,7 +1,10 @@
 import sqlite3
+import random as r
 from sqlite3 import Error
 import pandas as pd
-import random as r
+import names
+import math as m
+import builddb
 
 
 def openConnection(_dbFile):
@@ -76,11 +79,29 @@ def insertisp(_conn, name):
             c.execute(sql, (i[0], city))
             print("Inserting: (" + str(i[0]) + ' ' + city +') into: contractsperloc')
 
-    #alex part
+def updatespeed(_conn, oldspeed, newspeed):
+    c = _conn.cursor()
+    sql = '''update speed set s_speed = ? where s_speed = ?'''
+    c.execute(sql, (newspeed, oldspeed))
 
-def updatespeed(conn, oldspeed, newspeed):
-    sql
+    c.execute('''update network set n_speed = ? where n_speed = ?''', (newspeed,oldspeed))
+    c.execute('''select co_ispname, n_conname from network, contractsoff where co_conname = n_conname and n_speed=?''', (newspeed,))
+    n = c.fetchall()
+    for isp in n:
+        c.execute('''update network set n_price = ? where n_speed = ? and n_conname = ?''', (builddb.priceOfSpeed(newspeed, isp[0]),newspeed, isp[1]))
 
+def deletedev(_conn, devname):
+    c = _conn.cursor()
+    c.execute('''select d_address from devices where d_devname = ?''', (devname,))
+    addy = c.fetchone()[0]
+    c.execute('''delete from devices where d_devname = ?''', (devname,))
+    c.execute('''update house set devicecount=devicecount-1 where h_address = ?''', (addy,))
+
+def endcontract(_conn, n_address):
+    c = _conn.cursor()
+    c.execute('''delete from network where n_address = ?''', (n_address,))
+    c.execute('''delete from house where h_address = ?''', (n_address,))
+    c.execute('''delete from devices where d_address = ?''', (n_address,))
 
 def main():
     database = r"proj.sqlite"
@@ -88,7 +109,10 @@ def main():
     # create a database connection
     conn = openConnection(database)
     with conn:
-        insertisp(conn, 'benis') #needs extra var for pricing function
+        #insertisp(conn, 'randomname')
+        #updatespeed(conn, 50, 60)
+        #deletedev(conn, "Judith's console")
+        endcontract(conn, 'Address___#70707')
 
     closeConnection(conn, database)
 
