@@ -2,6 +2,7 @@ import sqlite3
 import random as r
 from sqlite3 import Error
 import pandas as pd
+import names
 
 def createTables(_conn):
     print("Create tables")
@@ -119,18 +120,27 @@ def populateTables(_conn):
         sql = 'insert into speed values (?,?)'
         for i in speeds:
             test = []
-            num = r.randint(1,4)
+            num = r.randint(1, len(cities)-1)
             j = 0
             while j <= num:
-                num2 = r.randint(0,4)
-                if cities[num2] not in test:
-                    test.append(cities[num2])
+                randcity = r.choice(cities)
+                if randcity not in test:
+                    test.append(randcity)
                     j += 1
             for city in test:
                 c.execute(sql, (i, city))
                 print("Inserting: (" + str(i) + ' ' + city +') into: speed')
-        sql = 'insert into devices values (?,?)'
-        c.execute('select h_adress, devicecount from house')
+        
+        sql = 'insert into devices values (?,?,?)'
+        c.execute('select h_address, devicecount from house')
+        houses = c.fetchall()
+        for house in houses:
+            for i in range(house[1]):
+                dtype = r.choice(devices)
+                devicename = names.get_first_name() + "'s " + dtype
+                daddress = house[0]
+                c.execute(sql, (devicename, dtype, daddress))
+                print("Inserting: (" + devicename + ' ' + dtype +' ' + daddress + ') into: speed')
         _conn.commit()
                     
     except Error as e:
