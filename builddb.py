@@ -87,7 +87,7 @@ def populateTables(_conn):
         isps = ['Banana Republic Wireless', 'Bojangles Express', 'Pineapple Inc', 'ATAT Wireless', 'Abar Internet']
         cities = ['Merced', 'Los Angeles', 'San Diego', 'Tokyo', 'Moscow']
         devices = ['laptop', 'pc', 'tablet', 'phone', 'console']
-        speeds = [10, 50, 100, 250, 1000]
+        speeds = [50, 100, 250, 1000]
         contractnames=['A', 'B', 'C']
 
         sql = "INSERT INTO location VALUES (?, ?)"
@@ -150,7 +150,7 @@ def populateTables(_conn):
             num = r.randint(0, len(availcity))
             j = 0
             while j < num:
-                randcity = r.choice(cities)
+                randcity = r.choice(availcity)
                 if randcity not in test and randcity in availcity:
                     test.append(randcity)
                     j += 1
