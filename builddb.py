@@ -15,9 +15,8 @@ def createTables(_conn):
         c.execute("""CREATE TABLE IF NOT EXISTS house(
             h_address varchar(255) not null,
             devicecount int not null,
-            h_conname int not null, 
             h_locname varchar(255) not null
-            )""") # Changed h_conname to be an int to represent the contract index, change back if necessary
+            )""") # Changed h_conname to be an int to represent the contract index, change back if necessary h_conname int not null,  deleted - for now
         print('tmade')
         c.execute("""CREATE TABLE IF NOT EXISTS contractsoff(
             co_ispname varchar(255) not null,
@@ -97,14 +96,13 @@ def populateTables(_conn):
                 c.execute(sql, (i, isp))
                 print("Inserting: (" + i + ", " + isp + ") into: location")
 
-        sql = "INSERT INTO house VALUES (?, ?, ?, ?)"
+        sql = "INSERT INTO house VALUES (?, ?, ?)"
         for i in cities:
             for j in range(3): # 3 houses per city
                 address = "Address___#" + str(r.randint(0,99999))
                 count = r.randint(1,20) # 1-20 devices in a house
-                contract = r.randint(1,10) # Refers to the contract number/index
-                c.execute(sql, (str(address), count, contract, i))
-                print("Inserting: (" + address + ", " + str(count) + ", " + str(contract) + ", " + i + ") into : house")
+                c.execute(sql, (str(address), count, i))
+                print("Inserting: (" + address + ", " + str(count) + ", " + i + ") into : house")
 
         sql = 'insert into contractsoff values (?,?)'
         for i in contractnames:
@@ -131,7 +129,8 @@ def populateTables(_conn):
             for city in test:
                 c.execute(sql, (i, city))
                 print("Inserting: (" + str(i) + ' ' + city +') into: speed')
-        
+        sql = 'insert into devices values (?,?)'
+        c.execute('select h_adress, devicecount from house')
         _conn.commit()
                     
     except Error as e:
