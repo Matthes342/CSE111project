@@ -3,3 +3,7 @@
 3. List all devices that are running on speeds greater than 100.
 4. Find all ISPs with speeds of 1000, and a price below 100.
 5. Find all laptops owned by someone who's name begins with a 'C' in Moscow.
+6. Assuming that a house hasn't been given a contract yet, list all possible contracts a house could be given. Assume the house being discussed is the first house in the house table. 
+7. Find the average price and speed of each ISP.
+8. Select the max speed of each location.
+9. List the available contracts per address. 
