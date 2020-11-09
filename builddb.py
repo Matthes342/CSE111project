@@ -3,6 +3,7 @@ import random as r
 from sqlite3 import Error
 import pandas as pd
 import names
+import math as m
 
 def createTables(_conn):
     print("Create tables")
@@ -163,6 +164,9 @@ def populateTables(_conn):
         print(e)
 
     print("++++++++++++++++++++++++++++++++++")
+
+def priceOfSpeed(speed):
+    return 30 * m.log(speed)
 
 def main():
     database = r"proj.sqlite"
