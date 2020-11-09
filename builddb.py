@@ -119,6 +119,10 @@ def populateTables(_conn):
             print("Inserting: (" + i + ', 3) into: ISP')
         
         sql = 'insert into speed values (?,?)'
+        for loc in cities:
+                i = 10
+                c.execute(sql, (i, loc))
+                print("Inserting: (" + str(i) + ' ' + loc +') into: speed')
         for i in speeds:
             test = []
             num = r.randint(1, len(cities)-1)
@@ -132,16 +136,22 @@ def populateTables(_conn):
                 c.execute(sql, (i, city))
                 print("Inserting: (" + str(i) + ' ' + city +') into: speed')
 
-        sql = 'insert into contractsperloc values (?,?)'
-        c.execute('select co_conname from contractsoff')
+        sql = 'insert into contractsperloc values (?,?)' #contracts per loc is limited based on availisp
+        c.execute('select co_conname, co_ispname from contractsoff')
         contracts = c.fetchall()
         for i in contracts:
+            availcity = []
+            c.execute('''select l_locname from location where availisp = ?''', [i[1]])
+            for city in c.fetchall():
+                availcity.append(city[0])
             test = []
-            num = r.randint(0, len(cities)-1)
+            if len(availcity) == 0:
+                break
+            num = r.randint(0, len(availcity))
             j = 0
-            while j <= num:
+            while j < num:
                 randcity = r.choice(cities)
-                if randcity not in test:
+                if randcity not in test and randcity in availcity:
                     test.append(randcity)
                     j += 1
             for city in test:
@@ -158,6 +168,29 @@ def populateTables(_conn):
                 daddress = house[0]
                 c.execute(sql, (devicename, dtype, daddress))
                 print("Inserting: (" + devicename + ' ' + dtype +' ' + daddress + ') into: speed')
+
+        sql = 'INSERT INTO network VALUES (?,?,?,?)'
+        query = "SELECT h_address FROM house"
+        c.execute(query)
+        houses = c.fetchall()
+        query = """SELECT DISTINCT h_address, cpl_conname, co_ispname, cpl_locname, s_speed
+                    FROM
+                        contractsoff,
+                        contractsperloc,
+                        speed,
+                        house
+                    WHERE (co_conname = cpl_conname) AND 
+                        (cpl_locname = s_locname) AND 
+                        (h_locname = cpl_locname) AND 
+                        (h_address = ?)
+                    ORDER BY h_address"""
+        for i in houses:
+            c.execute(query, (i[0],))
+            contractSpeeds = c.fetchall()
+            contract = r.choice(contractSpeeds)
+            print(contract)
+            c.execute(sql, (contract[1], priceOfSpeed(contract[4], contract[2]), contract[4], contract[0]))
+        
         _conn.commit()
                     
     except Error as e:
@@ -175,7 +208,7 @@ def priceOfSpeed(speed, isp):
         return m.sqrt(speed) + 50
     elif isp == options[3]:
         return m.fabs(-1 * pow((speed/20), 3) + 60)
-    elif isp == option[4]:
+    elif isp == options[4]:
         return 1.5 * speed
     else:
         return speed + 20
