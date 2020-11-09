@@ -1,0 +1,5 @@
+1. Find all ISPs that are offering service in Merced, but not in Tokyo.
+2. Find the total number of all devices from houses in San Diego.
+3. List all devices that are running on speeds greater than 100.
+4. Find all ISPs with speeds of 1000, and a price below 100.
+5. Find all laptops owned by someone who's name begins with a 'C' in Moscow.

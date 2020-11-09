@@ -188,8 +188,7 @@ def populateTables(_conn):
             c.execute(query, (i[0],))
             contractSpeeds = c.fetchall()
             contract = r.choice(contractSpeeds)
-            print(contract)
-            c.execute(sql, (contract[1], priceOfSpeed(contract[4], contract[2]), contract[4], contract[0]))
+            c.execute(sql, (contract[1], round(priceOfSpeed(contract[4], contract[2]), 2), contract[4], contract[0]))
         
         _conn.commit()
                     
