@@ -114,6 +114,12 @@ def populateTables(_conn):
                 c.execute(sql, (j, conname))
                 print("Inserting: (" + j + ',' + conname + ") into: contractsoffered")
         
+        sql = 'INSERT INTO ISP VALUES (?, ?)'
+        for i in isps:
+            c.execute(sql, (i, 3))
+            print("Inserting: (" + i + ', 3) into: ISP')
+            
+        
         _conn.commit()
                     
     except Error as e:
