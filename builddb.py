@@ -165,8 +165,20 @@ def populateTables(_conn):
 
     print("++++++++++++++++++++++++++++++++++")
 
-def priceOfSpeed(speed):
-    return 30 * m.log(speed)
+def priceOfSpeed(speed, isp):
+    options = ['Banana Republic Wireless', 'Bojangles Express', 'Pineapple Inc', 'ATAT Wireless', 'Abar Internet']
+    if isp == options[0]:
+        return 30 * m.log(speed)
+    elif isp == options[1]:
+        return (pow(speed, 2) / 5000) + 55
+    elif isp == options[2]:
+        return m.sqrt(speed) + 50
+    elif isp == options[3]:
+        return m.fabs(-1 * pow((speed/20), 3) + 60)
+    elif isp == option[4]:
+        return 1.5 * speed
+    else:
+        return speed + 20
 
 def main():
     database = r"proj.sqlite"
