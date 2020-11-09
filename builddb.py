@@ -48,7 +48,6 @@ def createTables(_conn):
         print('tmade')
         c.execute("""CREATE TABLE IF NOT EXISTS speed(
             s_speed int not null,
-            s_conname varchar(255) not null,
             s_locname varchar(255) not null
             )""")
         print('tmade')
@@ -118,8 +117,20 @@ def populateTables(_conn):
         for i in isps:
             c.execute(sql, (i, 3))
             print("Inserting: (" + i + ', 3) into: ISP')
-            
         
+        sql = 'insert into speed values (?,?)'
+        for i in speeds:
+            test = []
+            num = r.randint(1,4)
+            j = 0
+            while j <= num:
+                num2 = r.randint(0,4)
+                if cities[num2] not in test:
+                    test.append(cities[num2])
+                    j += 1
+            for city in test:
+                c.execute(sql, (i, city))
+                print("Inserting: (" + str(i) + ' ' + city +') into: speed')
         _conn.commit()
                     
     except Error as e:
