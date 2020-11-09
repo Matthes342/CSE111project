@@ -103,6 +103,16 @@ def endcontract(_conn, n_address):
     c.execute('''delete from house where h_address = ?''', (n_address,))
     c.execute('''delete from devices where d_address = ?''', (n_address,))
 
+def deleteisp(_conn ,ispname):
+    c = _conn.cursor()
+    c.execute('''delete from isp where i_ispname = ?''', (ispname,))
+    c.execute('''select co_conname from contractsoff where co_ispname = ?''', (ispname,))
+    ispcons = c.fetchall()
+    c.execute('''delete from contractsoff where co_ispname = ?''', (ispname,))
+    for cons in ispcons:
+        c.execute('''delete from network where n_conname = ?''', (cons[0],))
+        c.execute('''delete from contractsperloc where cpl_conname = ?''', (cons[0],))
+
 def main():
     database = r"proj.sqlite"
 
@@ -112,7 +122,8 @@ def main():
         #insertisp(conn, 'randomname')
         #updatespeed(conn, 50, 60)
         #deletedev(conn, "Judith's console")
-        endcontract(conn, 'Address___#70707')
+        #endcontract(conn, 'Address___#70707')
+        deleteisp(conn, 'Pineapple Inc')
 
     closeConnection(conn, database)
 
