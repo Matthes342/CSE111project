@@ -99,10 +99,10 @@ def populateTables(_conn):
 
         sql = "INSERT INTO house VALUES (?, ?, ?, ?)"
         for i in cities:
-            address = "Address___#" + str(r.randint(0,99999))
-            count = r.randint(1,20) # 1-20 devices in a house
-            contract = r.randint(1,10) # Refers to the contract number/index
             for j in range(3): # 3 houses per city
+                address = "Address___#" + str(r.randint(0,99999))
+                count = r.randint(1,20) # 1-20 devices in a house
+                contract = r.randint(1,10) # Refers to the contract number/index
                 c.execute(sql, (str(address), count, contract, i))
                 print("Inserting: (" + address + ", " + str(count) + ", " + str(contract) + ", " + i + ") into : house")
 
@@ -131,6 +131,7 @@ def populateTables(_conn):
             for city in test:
                 c.execute(sql, (i, city))
                 print("Inserting: (" + str(i) + ' ' + city +') into: speed')
+        
         _conn.commit()
                     
     except Error as e:
