@@ -88,6 +88,7 @@ def populateTables(_conn):
         cities = ['Merced', 'Los Angeles', 'San Diego', 'Tokyo', 'Moscow']
         devices = ['laptop', 'pc', 'tablet', 'phone', 'console']
         speeds = [10, 50, 100, 250, 1000]
+        contractnames=['A', 'B', 'C']
 
         sql = "INSERT INTO location VALUES (?, ?)"
         for i in cities:
@@ -105,6 +106,14 @@ def populateTables(_conn):
             for j in range(3): # 3 houses per city
                 c.execute(sql, (str(address), count, contract, i))
                 print("Inserting: (" + address + ", " + str(count) + ", " + str(contract) + ", " + i + ") into : house")
+
+        sql = 'insert into contractsoff values (?,?)'
+        for i in contractnames:
+            for j in isps:
+                conname = j + '#' + i
+                c.execute(sql, (j, conname))
+                print("Inserting: (" + j + ',' + conname + ") into: contractsoffered")
+        
         _conn.commit()
                     
     except Error as e:
