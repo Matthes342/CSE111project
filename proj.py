@@ -38,6 +38,13 @@ def insertisp(_conn, name):
     contractnames=['A', 'B', 'C']
     speeds = []
     locations = []
+
+    c.execute('''select distinct i_ispname from ISP''')
+    for isp in c.fetchall():
+        if name == isp[0]:
+            print("isp already exists")
+            return
+
     c.execute('''select distinct s_speed from speed''')
     for speed in c.fetchall():
         speeds.append(speed[0])
@@ -68,7 +75,7 @@ def insertisp(_conn, name):
             availcity.append(city[0])
         if len(availcity) == 0:
             break
-        num = r.randint(0, len(availcity)-1)
+        num = r.randint(0, len(availcity))
         j = 0
         while j < num:
             randcity = r.choice(availcity)
@@ -139,12 +146,12 @@ def main():
     # create a database connection
     conn = openConnection(database)
     with conn:
-        insertisp(conn, 'randomname')
-        updatespeed(conn, 50, 60)
+        insertisp(conn, 'randomname205')
+        #updatespeed(conn, 50, 60)
         #deletedev(conn, "Judith's console") #<- needs current db
         #endcontract(conn, 'Address___#70707')#<- needs current db
-        deleteisp(conn, 'Pineapple Inc')
-        inserthouse(conn, 'Address___#1111', 12, 'Merced')
+        #deleteisp(conn, 'Pineapple Inc')
+        #inserthouse(conn, 'Address___#1111', 12, 'Merced')
 
     closeConnection(conn, database)
 
