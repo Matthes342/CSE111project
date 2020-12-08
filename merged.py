@@ -140,16 +140,101 @@ app.layout = html.Div([
             n_intervals=0
         ),
 ])
+#alex callbacks
+# insertHouse()
+@app.callback(
+    Output('output-container-button', 'children'),
+    [Input('button', 'n_clicks'),
+     State("Loc", "value")],
+    [State('num', 'value'),
+     State('addr', 'value')]
+)
+def insertInfo(n_clicks, loc, num, addr):
+    if n_clicks != None:
+        conn = proj.openConnection(r"proj.sqlite")
+        nclicks = None
+        print("Inserted")
+        with conn:
+            proj.inserthouse(conn, "Address___#" + str(addr), num, loc)
+        proj.closeConnection(conn, r"proj.sqlite")
+
+# endContract()
+@app.callback(
+    Output('deleteContract-output', 'children'),
+    [Input('button1', 'n_clicks'), 
+     State("addies", "value")],
+)
+def deleteContractInfo(n_clicks, addr):
+    if n_clicks != None:
+        conn = proj.openConnection(r"proj.sqlite")
+        nclicks = None
+        print("Deleted Contract")
+        with conn:
+            proj.endcontract(conn, addr)
+        proj.closeConnection(conn, r"proj.sqlite")
+
+# insertIsp()
+@app.callback(
+    Output('addIsp-output', 'children'),
+    [Input('button2', 'n_clicks'), 
+     State("newIsp", "value")],
+)
+def addIspInfo(n_clicks, isp):
+    if n_clicks != None:
+        conn = proj.openConnection(r"proj.sqlite")
+        nclicks = None
+        print("ISP Added")
+        with conn:
+            proj.insertisp(conn, isp)
+        proj.closeConnection(conn, r"proj.sqlite")
+
+#updateSpeed()
+@app.callback(
+    Output('updateSpeed-output', 'children'),
+    [Input('button3', 'n_clicks'), 
+     State("speeds", "value"),
+     State('newSpeed', 'value')
+     ],
+)
+def updateSpeedInfo(n_clicks, oldSpeed, newSpeed):
+    if n_clicks != None:
+        conn = proj.openConnection(r"proj.sqlite")
+        nclicks = None
+        print("Speeds Updated")
+        with conn:
+            proj.updatespeed(conn, oldSpeed, newSpeed)
+        proj.closeConnection(conn, r"proj.sqlite")
+        # return [speedOptions]
+
+@app.callback(
+    [Output('speeds', 'options')], 
+    [Input('interval-update', 'n_intervals')]
+)
+def updateSpeedDropDown(n_intervals):
+    db_data = getdb()
+    speed = db_data["speed"]["s_speed"]
+    speeds = [{'label': i, 'value': i} for i in speed.unique()]
+    return [speeds]
+
+    #conn = proj.openConnection(r"proj.sqlite")
+    #c = conn.cursor()
+    #speeds = "SELECT DISTINCT s_speed FROM speed ORDER BY s_speed"
+    #c.execute(speeds)
+    #speeds = [{'label': str(i[0]) + " mbps", 'value': i[0]} for i in c.fetchall()]
+    #proj.closeConnection(conn, r"proj.sqlite")
+    #return [speeds]
+
 #brendan callbacks
 #callbacks for updates
 @app.callback(
-    [Output('Addresses', 'options')],
+    [Output('Addresses', 'options'),
+    Output('addies', 'options')],
     [Input('interval-update', 'n_intervals')])
 def update_type_dropdown(n_intervals):
     db_data = getdb()
     haddresses = db_data["house"]["h_address"]
     fields = [{'label': i, 'value': i} for i in haddresses]
-    return [fields]
+    return fields, fields
 
 @app.callback(
     Output("drupd-text", "children"), 

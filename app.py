@@ -12,7 +12,7 @@ import proj
 app = dash.Dash()
 
 conn = proj.openConnection(r"proj.sqlite")
-#make just a list of addresses
+#make just a list of addresses #kinda pointless
 allAddresses = "SELECT n_address FROM network ORDER BY n_address"
 c = conn.cursor()
 c.execute(allAddresses)
