@@ -38,6 +38,12 @@ def insertisp(_conn, name):
     contractnames=['A', 'B', 'C']
     speeds = []
     locations = []
+
+    c.execute('''select distinct i_ispname from ISP''')
+    for isp in c.fetchall():
+        if name == isp[0]:
+            print("isp already exists")
+            return
     c.execute('''select distinct s_speed from speed''')
     for speed in c.fetchall():
         speeds.append(speed[0])
@@ -68,7 +74,7 @@ def insertisp(_conn, name):
             availcity.append(city[0])
         if len(availcity) == 0:
             break
-        num = r.randint(0, len(availcity)-1)
+        num = r.randint(0, len(availcity))
         j = 0
         while j < num:
             randcity = r.choice(availcity)
