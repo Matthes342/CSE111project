@@ -12,6 +12,7 @@ import proj
 app = dash.Dash()
 
 conn = proj.openConnection(r"proj.sqlite")
+#make just a list of addresses
 allAddresses = "SELECT n_address FROM network ORDER BY n_address"
 c = conn.cursor()
 c.execute(allAddresses)
@@ -31,6 +32,7 @@ for i in c.fetchall():
 for i in speeds:
     speedOptions.append({'label': str(i) + " mbps", 'value': i})
 
+
 proj.closeConnection(conn, r"proj.sqlite")
 
 app.layout = html.Div(children =[ 
@@ -45,13 +47,14 @@ app.layout = html.Div(children =[
             {'label': 'Tokyo',  'value': 'Tokyo'},
             {'label': 'Moscow',  'value': 'Moscow'}
         ],
-        value='Merced'
     ),
     dcc.Input(id = 'addr', type = 'number'),
     dcc.Input(id = 'num', type = 'number'),
     html.Button('Submit', id = 'button'),
     html.Div(id='output-container-button',
              children='Enter a value and press submit'),
+
+    html.H1("Delete a contract"),
     html.Div(id = 'div'),
     'Find the address of the contract you would like to delete',
     dcc.Dropdown(
@@ -63,16 +66,14 @@ app.layout = html.Div(children =[
     html.Div(id='deleteContract-output',
              children='Enter a value and press submit'),
 
+    html.H1("Insert new ISP"),
     dcc.Input(id = 'newIsp', type = 'text', placeholder="Insert new ISP"),
     html.Button('Submit', id = 'button2'),
     html.Div(id='addIsp-output',
              children='Enter a value and press submit'),
 
-    dcc.Dropdown(
-        id = 'speeds', 
-        options=speedOptions,
-        value=str(speeds[0]) + " mbps"
-    ),
+    html.H1("Update Speeds"),
+    dcc.Dropdown(id = 'speeds'),
     dcc.Input(id = 'newSpeed', type = 'number'),
     html.Button('Submit', id = 'button3'),
     html.Div(id='updateSpeed-output',
@@ -82,7 +83,6 @@ app.layout = html.Div(children =[
         interval=2*1000,
         n_intervals=0
     ),
-    html.Div(id='updateDropDown-output')
 ]) 
 
 # insertHouse()
@@ -151,7 +151,7 @@ def updateSpeedInfo(n_clicks, oldSpeed, newSpeed):
         # return [speedOptions]
 
 @app.callback(
-    [Output('updateDropDown-output', 'children')], 
+    [Output('speeds', 'options')], 
     [Input('interval-update', 'n_intervals')]
 )
 def updateSpeedDropDown(n_intervals):
