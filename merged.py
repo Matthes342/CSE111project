@@ -92,6 +92,47 @@ app.layout = html.Div([
                'display': 'inline-block'}),
     html.Div(id='drupd-text',
              children='Updated contract to: '),
+    
+    html.H2("Input a new house"),
+    html.Div(id = 'space'),
+    dcc.Dropdown(
+        id = 'Loc', 
+        options=[
+            {'label': 'San Diego', 'value': 'San Diego'},
+            {'label': 'Los Angeles',  'value': 'Los Angeles'},
+            {'label': 'Merced',  'value': 'Merced'},
+            {'label': 'Tokyo',  'value': 'Tokyo'},
+            {'label': 'Moscow',  'value': 'Moscow'}
+        ],
+    ),
+    dcc.Input(id = 'addr', type = 'number'),
+    dcc.Input(id = 'num', type = 'number'),
+    html.Button('Submit', id = 'button'),
+    html.Div(id='output-container-button',
+             children='Enter a value and press submit'),
+
+    html.H2("Delete a contract"),
+    html.Div(id = 'div'),
+    'Find the address of the contract you would like to delete',
+    #call back for this
+    dcc.Dropdown(id = 'addies'),
+    html.Button('Submit', id = 'button1'),
+    html.Div(id='deleteContract-output',
+             children='Enter a value and press submit'),
+
+    html.H2("Insert new ISP"),
+    dcc.Input(id = 'newIsp', type = 'text', placeholder="Insert new ISP"),
+    html.Button('Submit', id = 'button2'),
+    html.Div(id='addIsp-output',
+             children='Enter a value and press submit'),
+
+    html.H2("Update Speeds"),
+    #call back for this
+    dcc.Dropdown(id = 'speeds'),
+    dcc.Input(id = 'newSpeed', type = 'number'),
+    html.Button('Submit', id = 'button3'),
+    html.Div(id='updateSpeed-output',
+             children='Enter a value and press submit'),
     #interval update component
     dcc.Interval(
             id='interval-update',
@@ -99,7 +140,7 @@ app.layout = html.Div([
             n_intervals=0
         ),
 ])
-
+#brendan callbacks
 #callbacks for updates
 @app.callback(
     [Output('Addresses', 'options')],
