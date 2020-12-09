@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sqlite3
 import random as r
 from sqlite3 import Error
@@ -206,7 +207,7 @@ def priceOfSpeed(speed, isp):
     elif isp == options[2]:
         return m.sqrt(speed) + 50
     elif isp == options[3]:
-        return m.fabs(-1 * pow((speed/20), 3) + 60)
+        return 30 * m.log(speed) + 20
     elif isp == options[4]:
         return 1.5 * speed
     else:

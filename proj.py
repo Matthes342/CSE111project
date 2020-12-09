@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sqlite3
 import random as r
 from sqlite3 import Error
