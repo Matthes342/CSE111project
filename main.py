@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+#label x and y axis
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Output, Input, State
@@ -91,7 +92,7 @@ app.layout = html.Div([
     html.Div(id='output-container-button',
              children='Enter a value and press submit'),
 
-    html.H2("Delete a contract"),
+    html.H2("Delete a House and End Contract"),
     html.Div(id = 'div'),
     'Find the address of the contract you would like to delete',
 
@@ -300,7 +301,9 @@ def update_bar_chart(addname, n_intervals):
                     text = test["cpl_conname"],
                     name = ispname))
     fig = go.Figure(data=bars)
-    fig.update_layout(barmode='group')
+    fig.update_layout(barmode='group',
+                    xaxis_title="Price",
+                    yaxis_title="Speed")
     return fig
 
 @app.callback(
